@@ -11782,7 +11782,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[1]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Import libraries necessary for this project</span>
@@ -11835,7 +11835,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[2]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Display a description of the dataset</span>
@@ -11962,7 +11962,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[3]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Select three indices of your choice you wish to sample from the dataset</span>
@@ -12117,7 +12117,7 @@ dtype: float64</pre>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[4]:</div>
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># TODO: Make a copy of the DataFrame, using the &#39;drop&#39; function to drop the given feature</span>
@@ -12135,7 +12135,7 @@ dtype: float64</pre>
 <span class="n">regressor</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train</span><span class="p">,</span> <span class="n">y_train</span><span class="p">)</span>
 
 <span class="c1"># TODO: Report the score of the prediction using the testing set</span>
-<span class="k">print</span> <span class="n">regressor</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
+<span class="k">print</span> <span class="s2">&quot;Grocery score with correlated feature:&quot;</span><span class="p">,</span> <span class="n">regressor</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test</span><span class="p">,</span> <span class="n">y_test</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -12148,7 +12148,7 @@ dtype: float64</pre>
 
 <div class="output_area"><div class="prompt"></div>
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>0.795293171715
+<pre>Grocery score with correlated feature: 0.795293171715
 </pre>
 </div>
 </div>
@@ -12162,7 +12162,7 @@ dtype: float64</pre>
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Below is presented score for each feature as a target label. As we can see the values are completely different. Some products like delicatessen are compltely independent from others, while products like Grocery and Detergents_Paper are definitely related to other other products which customer buy, which actually make  sence. It doesn't seem like someone will buy only DetergentsPaper. Normally people buy it with something else.</p>
+<p>Below is presented score for each feature as a target label. As we can see the values are completely different. Some products like delicatessen are compltely independent from others, while products like Grocery and Detergents_Paper are definitely related to other products which customer buys, which actually make  sence. It doesn't seem like someone will buy only DetergentsPaper. Normally people buy it with something else.</p>
 <table>
 <thead><tr>
 <th>Label</th>
@@ -12217,8 +12217,55 @@ dtype: float64</pre>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>As you can see above, I launched an algorithm for every feature in a dataset. And it seems like there are some habits in customers' behaviour. As far as I understand features with highest score are necessary to identify customer's spending habbits.</p>
-<p>Here is what I think. For instance, if model was able to predict values for <code>Grocery</code> based on some features, than we should be able to repeat it in opposite way. And it seems so. The score of <code>Detergents_Paper</code> seems quite same. So from my perspective those features are necessary for identifying customer's spending habbits.</p>
+<p>As you can see above, I launched an algorithm for every feature in a dataset. And it seems like there are some habits in customers' behaviour. As far as I understand features with highest score are not necessary to identify customer's spending habbits.</p>
+<p>Here is what I think. For instance, if model was able to predict values for <code>Grocery</code> based on some features, than we we can delete <code>Grocery</code> feature, because it seems like correlated with some other features and no new information is gained. And it seems so. The score of <code>Detergents_Paper</code> seems quite same. So from my perspective those features are correlated with each other. If these features are highly correlated then we can just leave one of them or compress them by applying PCA. First let's check how R^2 score will change for Grocery if we remove from dataset correlated features:</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython2"><pre><span></span><span class="c1"># Remove both correlated features.</span>
+<span class="n">new_data_test</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s1">&#39;Grocery&#39;</span><span class="p">,</span> <span class="s1">&#39;Detergents_Paper&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">label_test</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Grocery&#39;</span><span class="p">]</span>
+
+<span class="n">X_train_test</span><span class="p">,</span> <span class="n">X_test_test</span><span class="p">,</span> <span class="n">y_train_test</span><span class="p">,</span> <span class="n">y_test_test</span> <span class="o">=</span> <span class="n">cross_validation</span><span class="o">.</span><span class="n">train_test_split</span><span class="p">(</span><span class="n">new_data_test</span><span class="p">,</span> <span class="n">label_test</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span> <span class="n">random_state</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+<span class="n">regressor</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">DecisionTreeRegressor</span><span class="p">(</span><span class="n">random_state</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">regressor</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X_train_test</span><span class="p">,</span> <span class="n">y_train_test</span><span class="p">)</span>
+
+<span class="c1"># TODO: Report the score of the prediction using the testing set</span>
+<span class="k">print</span> <span class="s2">&quot;Grocery score without correlated feature:&quot;</span><span class="p">,</span> <span class="n">regressor</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X_test_test</span><span class="p">,</span> <span class="n">y_test_test</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Grocery score without correlated feature: 0.383801818204
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>So yes, here we see that after we have removed both correlated features, Rˆ2 score for <code>Grocery</code> dropped down twice. Thus only independent features (with low/negative rˆ2 score will be useful for identifying customer's spending.</p>
 
 </div>
 </div>
